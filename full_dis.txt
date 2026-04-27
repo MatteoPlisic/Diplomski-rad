@@ -1,0 +1,179 @@
+    0: \x80 PROTO      3
+    2: c    GLOBAL     'sklearn.ensemble._forest RandomForestClassifier'
+   51: q    BINPUT     0
+   53: )    EMPTY_TUPLE
+   54: \x81 NEWOBJ
+   55: q    BINPUT     1
+   57: }    EMPTY_DICT
+   58: q    BINPUT     2
+   60: (    MARK
+   61: X        BINUNICODE 'base_estimator'
+   80: q        BINPUT     3
+   82: c        GLOBAL     'sklearn.tree._classes DecisionTreeClassifier'
+  128: q        BINPUT     4
+  130: )        EMPTY_TUPLE
+  131: \x81     NEWOBJ
+  132: q        BINPUT     5
+  134: }        EMPTY_DICT
+  135: q        BINPUT     6
+  137: (        MARK
+  138: X            BINUNICODE 'criterion'
+  152: q            BINPUT     7
+  154: X            BINUNICODE 'gini'
+  163: q            BINPUT     8
+  165: X            BINUNICODE 'splitter'
+  178: q            BINPUT     9
+  180: X            BINUNICODE 'best'
+  189: q            BINPUT     10
+  191: X            BINUNICODE 'max_depth'
+  205: q            BINPUT     11
+  207: N            NONE
+  208: X            BINUNICODE 'min_samples_split'
+  230: q            BINPUT     12
+  232: K            BININT1    2
+  234: X            BINUNICODE 'min_samples_leaf'
+  255: q            BINPUT     13
+  257: K            BININT1    1
+  259: X            BINUNICODE 'min_weight_fraction_leaf'
+  288: q            BINPUT     14
+  290: G            BINFLOAT   0.0
+  299: X            BINUNICODE 'max_features'
+  316: q            BINPUT     15
+  318: N            NONE
+  319: X            BINUNICODE 'max_leaf_nodes'
+  338: q            BINPUT     16
+  340: N            NONE
+  341: X            BINUNICODE 'random_state'
+  358: q            BINPUT     17
+  360: N            NONE
+  361: X            BINUNICODE 'min_impurity_decrease'
+  387: q            BINPUT     18
+  389: G            BINFLOAT   0.0
+  398: X            BINUNICODE 'class_weight'
+  415: q            BINPUT     19
+  417: N            NONE
+  418: X            BINUNICODE 'ccp_alpha'
+  432: q            BINPUT     20
+  434: G            BINFLOAT   0.0
+  443: X            BINUNICODE '_sklearn_version'
+  464: q            BINPUT     21
+  466: X            BINUNICODE '1.0.2'
+  476: q            BINPUT     22
+  478: u            SETITEMS   (MARK at 137)
+  479: b        BUILD
+  480: X        BINUNICODE 'n_estimators'
+  497: q        BINPUT     23
+  499: M        BININT2    600
+  502: X        BINUNICODE 'estimator_params'
+  523: q        BINPUT     24
+  525: (        MARK
+  526: h            BINGET     7
+  528: h            BINGET     11
+  530: h            BINGET     12
+  532: h            BINGET     13
+  534: h            BINGET     14
+  536: h            BINGET     15
+  538: h            BINGET     16
+  540: h            BINGET     18
+  542: h            BINGET     17
+  544: h            BINGET     20
+  546: t            TUPLE      (MARK at 525)
+  547: q        BINPUT     25
+  549: X        BINUNICODE 'bootstrap'
+  563: q        BINPUT     26
+  565: \x88     NEWTRUE
+  566: X        BINUNICODE 'oob_score'
+  580: q        BINPUT     27
+  582: \x89     NEWFALSE
+  583: X        BINUNICODE 'n_jobs'
+  594: q        BINPUT     28
+  596: N        NONE
+  597: h        BINGET     17
+  599: K        BININT1    50
+  601: X        BINUNICODE 'verbose'
+  613: q        BINPUT     29
+  615: K        BININT1    0
+  617: X        BINUNICODE 'warm_start'
+  632: q        BINPUT     30
+  634: \x89     NEWFALSE
+  635: h        BINGET     19
+  637: N        NONE
+  638: X        BINUNICODE 'max_samples'
+  654: q        BINPUT     31
+  656: N        NONE
+  657: h        BINGET     7
+  659: h        BINGET     8
+  661: h        BINGET     11
+  663: N        NONE
+  664: h        BINGET     12
+  666: K        BININT1    2
+  668: h        BINGET     13
+  670: K        BININT1    6
+  672: h        BINGET     14
+  674: G        BINFLOAT   0.0
+  683: h        BINGET     15
+  685: X        BINUNICODE 'sqrt'
+  694: q        BINPUT     32
+  696: h        BINGET     16
+  698: N        NONE
+  699: h        BINGET     18
+  701: G        BINFLOAT   0.0
+  710: h        BINGET     20
+  712: G        BINFLOAT   0.0
+  721: X        BINUNICODE 'feature_names_in_'
+  743: q        BINPUT     33
+  745: c        GLOBAL     'joblib.numpy_pickle NumpyArrayWrapper'
+  784: q        BINPUT     34
+  786: )        EMPTY_TUPLE
+  787: \x81     NEWOBJ
+  788: q        BINPUT     35
+  790: }        EMPTY_DICT
+  791: q        BINPUT     36
+  793: (        MARK
+  794: X            BINUNICODE 'subclass'
+  807: q            BINPUT     37
+  809: c            GLOBAL     'numpy ndarray'
+  824: q            BINPUT     38
+  826: X            BINUNICODE 'shape'
+  836: q            BINPUT     39
+  838: M            BININT2    293
+  841: \x85         TUPLE1
+  842: q            BINPUT     40
+  844: X            BINUNICODE 'order'
+  854: q            BINPUT     41
+  856: X            BINUNICODE 'C'
+  862: q            BINPUT     42
+  864: X            BINUNICODE 'dtype'
+  874: q            BINPUT     43
+  876: c            GLOBAL     'numpy dtype'
+  889: q            BINPUT     44
+  891: X            BINUNICODE 'O8'
+  898: q            BINPUT     45
+  900: \x89         NEWFALSE
+  901: \x88         NEWTRUE
+  902: \x87         TUPLE3
+  903: q            BINPUT     46
+  905: R            REDUCE
+  906: q            BINPUT     47
+  908: (            MARK
+  909: K                BININT1    3
+  911: X                BINUNICODE '|'
+  917: q                BINPUT     48
+  919: N                NONE
+  920: N                NONE
+  921: N                NONE
+  922: J                BININT     -1
+  927: J                BININT     -1
+  932: K                BININT1    63
+  934: t                TUPLE      (MARK at 908)
+  935: q            BINPUT     49
+  937: b            BUILD
+  938: X            BINUNICODE 'allow_mmap'
+  953: q            BINPUT     50
+  955: \x89         NEWFALSE
+  956: u            SETITEMS   (MARK at 793)
+  957: b        BUILD
+  958: \x80     PROTO      2
+  960: c        GLOBAL     'numpy.core.multiarray _reconstruct'
+  996: q        BINPUT     0
+STOPPED: memo key 0 already defined

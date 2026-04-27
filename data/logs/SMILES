@@ -1,0 +1,12 @@
+N=C(COc1ccc(C(F)(F)F)cn1)C(Cc1ccc(O)c(O)c1)NC(=O)C(CCC(=O)O)CC(=O)O	0.58
+CN(CC(=O)NCc1ccc(F)cc1)C(=O)COC(=O)CNC(=O)CNC(=O)CNC(=O)C(C)(C)COCc1ccccc1	0.61
+O=C(CNC(=O)COC(=O)C1(O)CCCN1Cc1ccccc1)CC(O)COc1cc(Cl)ccc1OCC(F)(F)F	0.6
+C#CCC(N)C(=O)NCC(=O)NCC(=O)NCC(=O)OCC(C)COCc1ccccc1F	0.61
+O=C(Nc1nccs1)C1CCc2cc(F)cc(NCc3ccc(C(F)(F)F)nc3)c21	0.56
+CCC(C)C(N)C(=O)NCC(=O)NCc1ccc(C(F)(F)F)cc1	0.56
+O=[N+]([O-])CCN(NC(=O)COC(=O)c1cc(F)ccn1)CCc1ccccc1	0.58
+CC(=O)NCC(=O)N1CCN(c2ccc(NC(=O)COc3ccccc3OC(F)(F)F)cc2)CC1	0.59
+CCC(C)C(CNCc1ccc(C(C)C)cc1)C(=O)Oc1ccccc1Cl	0.52
+COc1ncc(C(F)(F)F)c(Nc2ccc(O)c(O)c2)n1	0.57
+CCC(O)C(=O)NCC(=O)OCC(=O)NCc1ccc(C)cc1	0.57
+CC(N)C(=O)Nc1ccc(NC(=O)CNC(=O)Cc2ccccc2)cc1OC(C)C(F)(F)F	0.61

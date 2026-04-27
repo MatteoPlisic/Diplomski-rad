@@ -1,0 +1,4 @@
+smiles,target
+CCO,0.5
+CC(C)O,0.8
+C1CCCCC1,0.3

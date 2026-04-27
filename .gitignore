@@ -1,0 +1,31 @@
+# Virtual environments
+env/
+reinvent_env/
+myenv/
+.venv/
+venv/
+
+# Binary packages
+binarni paketi/
+
+# PyTorch model checkpoints
+qed_model_dir/
+qed_model_dir4/
+qued_model_dir4/
+non_drug_model_dir/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE settings
+.idea/
+.vscode/
+*.suo
+*.user
+
+# OS
+.DS_Store
+Thumbs.db
