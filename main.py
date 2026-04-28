@@ -40,10 +40,23 @@ parser.add_argument('--num-steps', action='store', dest='n_steps', type=int,
 parser.add_argument('--batch-size', action='store', dest='batch_size', type=int,
                     default=64)
 parser.add_argument('--sigma', action='store', dest='sigma', type=int,
-                    default=20)
+                    default=80,
+                    help='Weight of the scoring function in the augmented likelihood. '
+                         'Higher values give the score more influence over the prior (default: 80).')
+parser.add_argument('--score-min', action='store', dest='score_min', type=float,
+                    default=0.3,
+                    help='Lower bound of raw score range, normalized to 0.0 (default: 0.3).')
+parser.add_argument('--score-max', action='store', dest='score_max', type=float,
+                    default=0.85,
+                    help='Upper bound of raw score range, normalized to 1.0 (default: 0.85).')
+parser.add_argument('--prior-weight', action='store', dest='prior_weight', type=float,
+                    default=0.8,
+                    help='Scales the prior likelihood in the augmented-likelihood formula. '
+                         'Values < 1.0 allow the agent to explore more diverse chemical space. '
+                         'Recommended range: 0.7–1.0 (default: 0.8).')
 parser.add_argument('--experience', action='store', dest='experience_replay', type=int,
-                    default=0, help='Number of experience sequences to sample each step. '\
-                    '0 means no experience replay.')
+                    default=10, help='Number of top-scoring sequences to replay each step. '\
+                    '0 means no experience replay (default: 10).')
 parser.add_argument('--num-processes', action='store', dest='num_processes',
                     type=int, default=0,
                     help='Number of processes used to run the scoring function. "0" means ' \

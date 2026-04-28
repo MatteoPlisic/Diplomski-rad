@@ -42,9 +42,15 @@ rdBase.DisableLog('rdApp.error')
 
 from rdkit import Chem
 from rdkit.Chem import QED
-import deepchem as dc
 import numpy as np
 import os, sys
+
+# deepchem is only needed for the no_sulphur scoring function.
+# Import it lazily to avoid a hard dependency when using tanimoto or activity_model.
+try:
+    import deepchem as dc
+except ImportError:
+    dc = None
 
 # Now, proceed with the rest of your imports.
 import warnings
@@ -59,6 +65,8 @@ class no_sulphur():
     """
 
     def __init__(self):
+        if dc is None:
+            raise ImportError("deepchem is required for no_sulphur scoring. Install it with: pip install deepchem")
 
         # Try to use MorganGenerator (if available), otherwise fall back to CircularFingerprint.
         try:
@@ -126,7 +134,7 @@ class tanimoto():
        Returns predict_proba score in range [0, 1]."""
 
     kwargs = ["clf_path"]
-    clf_path = 'random_forest_model_amp.pkl'
+    clf_path = 'random_forest_model_amp_fixed.pkl'
 
     def __init__(self):
         from mordred import Calculator, descriptors as mordred_descriptors
@@ -134,13 +142,13 @@ class tanimoto():
         # File is a joblib-serialized RandomForestClassifier (293 Mordred features, classes [0,1])
         self.clf = joblib.load(self.clf_path)
 
+        # Fix for sklearn >= 1.2: base_estimator was renamed to estimator
+        if not hasattr(self.clf, 'estimator') and hasattr(self.clf, 'base_estimator'):
+            self.clf.estimator = self.clf.base_estimator
+
         # Feature names: the 293 Mordred descriptor names the model was trained on.
-        # Recovered from the joblib stream - stored as an internal numpy array in the RF object.
-        # We re-derive them by loading the raw stream with pickle to get the names array.
-        import io
-        with open(self.clf_path, 'rb') as f:
-            data = f.read()
-        self.feature_names = pickle._Unpickler(io.BytesIO(data)).load()  # ndarray of 293 names
+        # sklearn >= 1.0 stores them in feature_names_in_ after fitting with a DataFrame.
+        self.feature_names = self.clf.feature_names_in_
 
         print(f"AMP RF model loaded. n_features={self.clf.n_features_in_}, classes={self.clf.classes_}")
 
@@ -180,7 +188,11 @@ class tanimoto():
         try:
             # predict_proba returns [[prob_class0, prob_class1]]
             # class 1 = AMP active
-            score = float(self.clf.predict_proba(features)[0, 1])
+            # Normalize in case the loaded model returns unnormalized counts
+            # (cross-version sklearn pickle compatibility issue)
+            proba = self.clf.predict_proba(features)[0]
+            total = proba.sum()
+            score = float(proba[1] / total) if total > 0 else 0.0
         except Exception as e:
             print(f"Prediction error for {smile}: {e}")
             return 0.0
