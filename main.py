@@ -49,6 +49,9 @@ parser.add_argument('--score-min', action='store', dest='score_min', type=float,
 parser.add_argument('--score-max', action='store', dest='score_max', type=float,
                     default=0.85,
                     help='Upper bound of raw score range, normalized to 1.0 (default: 0.85).')
+parser.add_argument('--peptide-only', action='store_true', dest='peptide_only',
+                    default=True,
+                    help='Zero out score for non-peptide molecules (default: True).')
 parser.add_argument('--prior-weight', action='store', dest='prior_weight', type=float,
                     default=0.8,
                     help='Scales the prior likelihood in the augmented-likelihood formula. '

@@ -144,8 +144,17 @@ class Experience(object):
         if len(self.memory)<n:
             raise IndexError('Size of memory ({}) is less than requested sample ({})'.format(len(self), n))
         else:
-            scores = [x[1] for x in self.memory]
-            sample = np.random.choice(len(self), size=n, replace=False, p=scores/np.sum(scores))
+            scores = np.array([x[1] for x in self.memory], dtype=np.float64)
+            score_sum = np.sum(scores)
+            if score_sum > 0:
+                probs = scores / score_sum
+                # If too few non-zero entries for replace=False, fall back to uniform
+                n_nonzero = np.count_nonzero(probs)
+                if n_nonzero < n:
+                    probs = np.ones(len(scores)) / len(scores)
+            else:
+                probs = np.ones(len(scores)) / len(scores)  # uniform if all zeros
+            sample = np.random.choice(len(self), size=n, replace=False, p=probs)
             sample = [self.memory[i] for i in sample]
             smiles = [x[0] for x in sample]
             scores = [x[1] for x in sample]

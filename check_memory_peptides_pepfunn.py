@@ -12,12 +12,20 @@ import sys
 
 from pepfunn.sequence import peptideFromSMILES
 
-MEMORY_PATH = os.path.join(
-    "data", "results", "run_2026-03-18-21_13_28", "memory"
-)
-OUTPUT_PATH = os.path.join(
-    "data", "results", "run_2026-03-18-21_13_28", "peptide_results_pepfunn.txt"
-)
+def find_latest_run(results_dir="data/results"):
+    runs = [
+        d for d in os.listdir(results_dir)
+        if os.path.isdir(os.path.join(results_dir, d)) and d.startswith("run_")
+    ]
+    if not runs:
+        raise FileNotFoundError(f"No runs found in {results_dir}")
+    latest = sorted(runs)[-1]
+    print(f"Using run: {latest}")
+    return os.path.join(results_dir, latest)
+
+run_dir = find_latest_run()
+MEMORY_PATH = os.path.join(run_dir, "memory")
+OUTPUT_PATH = os.path.join(run_dir, "peptide_results_pepfunn.txt")
 
 
 def classify(smiles: str):
