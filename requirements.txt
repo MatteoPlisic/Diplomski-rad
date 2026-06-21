@@ -1,0 +1,34 @@
+# Ovisnosti za REINVENT prilagodbu (domena aminokiselina / AMP)
+# Instalacija:  pip install -r requirements.txt
+#
+# NAPOMENA: torch je naveden u CUDA (GPU) verziji. Za CPU-only instalaciju
+# zamijeni redak s:  torch==2.5.1
+# ili instaliraj s odgovarajućeg PyTorch indeksa:
+#   pip install torch==2.5.1+cu121 --index-url https://download.pytorch.org/whl/cu121
+
+# --- jezgra (generativni model + RL) ---
+torch==2.5.1+cu121
+numpy==1.26.4
+tqdm==4.67.1
+
+# --- kemija / deskriptori ---
+rdkit==2024.9.4
+mordred==1.2.0
+networkx==2.8.8          # mordred zahtijeva < 3.0
+
+# --- model vrednovanja (AMP Random Forest) ---
+scikit-learn==1.7.2
+scipy==1.15.3
+joblib==1.5.3
+
+# --- analiza peptida ---
+pepfunn                  # Novo Nordisk; instalirati prema uputama projekta
+
+# --- analiza rezultata i grafovi ---
+matplotlib==3.10.9
+pandas==2.3.3
+logomaker==0.8.7
+
+# --- razno ---
+beautifulsoup4==4.14.3
+pypdf==6.13.1            # samo za izvlačenje teksta iz PDF-a (pomoćno)

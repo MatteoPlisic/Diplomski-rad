@@ -52,6 +52,16 @@ parser.add_argument('--score-max', action='store', dest='score_max', type=float,
 parser.add_argument('--peptide-only', action='store_true', dest='peptide_only',
                     default=True,
                     help='Zero out score for non-peptide molecules (default: True).')
+parser.add_argument('--filter-mode', action='store', dest='filter_mode',
+                    choices=['basic', 'strict', 'strict_v2', 'strict_v3', 'strict_v4', 'strict_v5'],
+                    default='basic',
+                    help='Peptide filter strictness: '
+                         '"basic" = only peptide check (default), '
+                         '"strict" = also reject 3+ consecutive identical residues, '
+                         '"strict_v2" = max 25%% noncanonical AAs + min 4 residues, '
+                         '"strict_v3" = strict_v2 + reject 3+ consecutive identical residues, '
+                         '"strict_v4" = strict_v3 + 0.85x soft penalty if any noncanonical AA present, '
+                         '"strict_v5" = strict_v3 + stronger 0.5x penalty if any noncanonical AA present.')
 parser.add_argument('--prior-weight', action='store', dest='prior_weight', type=float,
                     default=0.8,
                     help='Scales the prior likelihood in the augmented-likelihood formula. '

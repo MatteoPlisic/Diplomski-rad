@@ -32,8 +32,9 @@ def _patched_check(node_ndarray, expected_dtype):
 _tree._check_node_ndarray = _patched_check
 # ------------------------------------------------------------------------
 
-src = 'random_forest_model_amp.pkl'
-dst = 'random_forest_model_amp_fixed.pkl'
+# putanje su relativne na korijen projekta (pokreni: python setup/fix_model.py)
+src = 'models/random_forest_model_amp.pkl'
+dst = 'models/random_forest_model_amp_fixed.pkl'
 
 print(f"Loading {src} ...")
 clf = joblib.load(src)
