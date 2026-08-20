@@ -17,21 +17,18 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 RESULTS_DIR = "data/results"
-LABEL_TOKENS = ("_A_basic", "_B_strict", "_C_strict_v2",
-                "_D_strict_v3", "_D_from_C_strict_v3", "_E_strict_v4",
-                "_F_strict_v5")
+LABEL_TOKENS = ("_A_basic", "_B_strict", "_C_strict_v2", "_D_strict_v3",
+                "_E_strict_v4", "_F_strict_v5", "_G_warmstart")
 
 # Short display label + color per run (matched by substring in folder name)
 RUN_STYLE = [
-    ("_A_basic_1",          "A basic (run 1)",   "#1f77b4"),
-    ("_A_basic_2",          "A basic (run 2)",   "#4a9fe0"),
-    ("_A_basic_3",          "A basic (run 3)",   "#8ec5f0"),
-    ("_B_strict",           "B strict",          "#2ca02c"),
-    ("_C_strict_v2",        "C strict_v2",       "#ff7f0e"),
-    ("_D_strict_v3",        "D strict_v3",       "#d62728"),
-    ("_D_from_C_strict_v3", "D-from-C",          "#9467bd"),
-    ("_E_strict_v4",        "E strict_v4",       "#000000"),
-    ("_F_strict_v5",        "F strict_v5",       "#8c564b"),
+    ("_A_basic",     "Varijanta A", "#1f77b4"),
+    ("_B_strict",    "Varijanta B", "#2ca02c"),
+    ("_C_strict_v2", "Varijanta C", "#ff7f0e"),
+    ("_D_strict_v3", "Varijanta D", "#d62728"),
+    ("_E_strict_v4", "Varijanta E", "#000000"),
+    ("_F_strict_v5", "Varijanta F", "#8c564b"),
+    ("_G_warmstart", "Varijanta G", "#9467bd"),
 ]
 
 
@@ -72,17 +69,22 @@ def collect_runs():
     return runs
 
 
+import matplotlib.ticker as _mt
+_zarez = _mt.FuncFormatter(lambda v, _: f"{v:.1f}".replace(".", ","))
+
+
 def plot_per_run(runs):
     """For each run: avg + median + best on the same axes, saved in its folder."""
     for folder, label, _color, (steps, avg, median, best) in runs:
         fig, ax = plt.subplots(figsize=(11, 5))
-        ax.plot(steps, avg,    label="Average", color="steelblue", linewidth=1.6)
-        ax.plot(steps, median, label="Median",  color="darkorange", linewidth=1.6)
-        ax.plot(steps, best,   label="Best",    color="seagreen",  linewidth=1.6)
-        ax.set_title(f"Score progress — {label}", fontsize=12, fontweight="bold")
-        ax.set_xlabel("Training Step")
-        ax.set_ylabel("Score")
+        ax.plot(steps, avg,    label="Prosjek",  color="steelblue", linewidth=1.6)
+        ax.plot(steps, median, label="Medijan",  color="darkorange", linewidth=1.6)
+        ax.plot(steps, best,   label="Najbolji", color="seagreen",  linewidth=1.6)
+        ax.set_title(f"Kretanje rezultata — {label}", fontsize=12, fontweight="bold")
+        ax.set_xlabel("Korak treninga")
+        ax.set_ylabel("Rezultat")
         ax.set_ylim(0, 1)
+        ax.yaxis.set_major_formatter(_zarez)
         ax.grid(True, alpha=0.3)
         ax.legend(loc="lower right", fontsize=10)
         plt.tight_layout()
@@ -94,18 +96,19 @@ def plot_per_run(runs):
 
 def plot_all(runs):
     fig, axes = plt.subplots(3, 1, figsize=(11, 13), sharex=True)
-    fig.suptitle("Usporedba score-a kroz trening (svi runovi)",
+    fig.suptitle("Usporedba rezultata kroz trening (sve varijante)",
                  fontsize=14, fontweight="bold")
 
-    metrics = [("Average Score", 1), ("Median Score", 2), ("Best Score", 3)]
+    metrics = [("Prosječni rezultat", 1), ("Medijan rezultata", 2), ("Najbolji rezultat", 3)]
     for ax, (ylabel, idx) in zip(axes, metrics):
         for folder, label, color, (steps, avg, median, best) in runs:
             series = [avg, median, best][idx - 1]
             ax.plot(steps, series, label=label, color=color, linewidth=1.3, alpha=0.85)
         ax.set_ylabel(ylabel)
         ax.set_ylim(0, 1)
+        ax.yaxis.set_major_formatter(_zarez)
         ax.grid(True, alpha=0.3)
-    axes[-1].set_xlabel("Training Step")
+    axes[-1].set_xlabel("Korak treninga")
     axes[0].legend(loc="lower right", fontsize=8, ncol=2)
 
     plt.tight_layout(rect=(0, 0, 1, 0.98))
@@ -119,11 +122,12 @@ def plot_avg_only(runs):
     fig, ax = plt.subplots(figsize=(12, 6))
     for folder, label, color, (steps, avg, median, best) in runs:
         ax.plot(steps, avg, label=label, color=color, linewidth=1.6, alpha=0.9)
-    ax.set_title("Average score kroz trening — usporedba svih varijanti",
+    ax.set_title("Prosječni rezultat kroz trening — usporedba varijanti",
                  fontsize=13, fontweight="bold")
-    ax.set_xlabel("Training Step")
-    ax.set_ylabel("Average Score")
+    ax.set_xlabel("Korak treninga")
+    ax.set_ylabel("Prosječni rezultat")
     ax.set_ylim(0, 1)
+    ax.yaxis.set_major_formatter(_zarez)
     ax.grid(True, alpha=0.3)
     ax.legend(loc="lower right", fontsize=9, ncol=2)
 

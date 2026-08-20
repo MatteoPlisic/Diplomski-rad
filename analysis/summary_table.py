@@ -18,15 +18,13 @@ RESULTS_DIR = "data/results"
 
 # Ordered (folder substring, display label, short key)
 RUNS = [
-    ("_A_basic_1",          "A (run 1)",   "A1"),
-    ("_A_basic_2",          "A (run 2)",   "A2"),
-    ("_A_basic_3",          "A (run 3)",   "A3"),
-    ("_B_strict",           "B",           "B"),
-    ("_C_strict_v2",        "C",           "C"),
-    ("_D_strict_v3",        "D",           "D"),
-    ("_D_from_C_strict_v3", "D\\textleftarrow C", "DC"),
-    ("_E_strict_v4",        "E",           "E"),
-    ("_F_strict_v5",        "F",           "F"),
+    ("_A_basic",     "A", "A"),
+    ("_B_strict",    "B", "B"),
+    ("_C_strict_v2", "C", "C"),
+    ("_D_strict_v3", "D", "D"),
+    ("_E_strict_v4", "E", "E"),
+    ("_F_strict_v5", "F", "F"),
+    ("_G_warmstart", "G", "G"),
 ]
 
 

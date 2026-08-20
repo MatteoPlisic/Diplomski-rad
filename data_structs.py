@@ -124,7 +124,8 @@ class Experience(object):
         self.voc = voc
 
     def add_experience(self, experience):
-        """Experience should be a list of (smiles, score, prior likelihood) tuples"""
+        """Experience should be a list of (smiles, score, prior_likelihood, step) tuples.
+           The step (korak generiranja) is optional za unatrag-kompatibilnost."""
         self.memory.extend(experience)
         if len(self.memory)>self.max_size:
             # Remove duplicates
@@ -181,7 +182,7 @@ class Experience(object):
         encoded = MolData.collate_fn(encoded)
         prior_likelihood, _ = Prior.likelihood(encoded.long())
         prior_likelihood = prior_likelihood.data.cpu().numpy()
-        new_experience = zip(smiles, scores, prior_likelihood)
+        new_experience = zip(smiles, scores, prior_likelihood, [-1] * len(smiles))
         self.add_experience(new_experience)
 
     def print_memory(self, path):
@@ -190,11 +191,12 @@ class Experience(object):
         print("         Best recorded SMILES: \n")
         print("Score     Prior log P     SMILES\n")
         with open(path, 'w') as f:
-            f.write("SMILES Score PriorLogP\n")
+            f.write("SMILES Score PriorLogP Step\n")
             for i, exp in enumerate(self.memory[:100]):
-                if i < 50:
+                step = exp[3] if len(exp) > 3 else -1
+                if i < 50:   # konzola prikazuje samo top 50 da ne spama
                     print("{:4.2f}   {:6.2f}        {}".format(exp[1], exp[2], exp[0]))
-                    f.write("{} {:4.2f} {:6.2f}\n".format(*exp))
+                f.write("{} {:4.2f} {:6.2f} {}\n".format(exp[0], exp[1], exp[2], step))
         print("\n" + "*" * 80 + "\n")
 
     def __len__(self):

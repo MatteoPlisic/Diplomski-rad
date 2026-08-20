@@ -1,0 +1,368 @@
+===== STR 1 =====
+SVEUČILIŠTE U RIJECI 
+TEHNIČKI FAKULTET 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+UPUTE ZA IZRADU I SAMOARHIVIRANJE 
+ ZAVRŠNOG / DIPLOMSKOG RADA 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+U Rijeci, lipanj 2022.
+===== STR 2 =====
+1 
+1. STRUKTURA RADA  
+Završni/diplomski rad (u daljnjem tekstu: rad) je samostalan stručni rad u kojem student 
+pod vodstvom mentora obrađuje izabranu temu. Izradom rada student pokazuje teorijsko i 
+praktično znanje, sposobnost planiranja i obrade zadanog stručnog problema kao i sposobnost 
+samostalnog služenja domaćom i stranom literaturom. Rad zadaje mentor iz područja njegove 
+djelatnosti, a mora biti u skladu s osnovnim ciljevima studijskog programa. Nakon definiranja i 
+prihvaćanja teme, nastavnik je dužan uputiti studenta u način obrade teme, uputiti ga na 
+dodatnu literaturu i odrediti opseg rada.  
+Korice rada trebaju izgledati kako je navedeno u Prilogu 1. Prva stranica po otvaranju 
+korica treba biti replika korica na bijelom papiru, s time da se ispod naslova rada dopisuje ime i 
+prezime te znanstveno -nastavno zvanje mentora  kako je navedeno u  Prilogu 2 . Sljedeća 
+uvezana stranica mora biti izvornik ( original) zadatka. Sljedeća stranica je potpisana izjava o 
+samostalnoj izradbi rada.  Zatim slijedi ili prazna stranica ili stranica sa zahvalom (zahvala nije 
+obvezna). Nakon toga dolazi stranica s ispisom sadržaja rada te dalje tekst rada.  
+ Rad je potrebno podijeliti na poglavlja sa sljedećom strukturom:  
+1) Sadržaj – ispis poglavlja i potpoglavlja s brojem stranice na kojem se nalaze.  
+2) Uvod – temu rada na temelju dostupne literature smjestiti u š ire područje struke. U pravilu 
+Uvod ne bi trebao biti duži od dvije stranice.  
+3) Poglavlja u kojima se:  
+- analizira problem i daju osnovne poznate zakonitosti vezane uz njegovo rješavanje,  
+- opisuje rješavanje zadatka i odgovarajući proračuni,  
+- opisuje sklop ili programska podrška,  
+- iznose i analiziraju rezultati do kojih se došlo rješavajući problematiku zadatka, rezultati 
+mjerenja, grafički prikazi, ispisi i sl.  
+Poglavlja bi trebala biti uravnoteženog obima.  
+4) Zaključak – u kojemu se sažimaju re zultati rada. U pravilu Zaključak ne bi trebao biti duži od 
+dvije stranice.  
+5) Literatura – se navodi iza Zaključka. U tekstu rada mora svugdje biti navedena literatura gdje 
+je navođenje ili grafički prikaz preuzet ili se temelji na nekom pisanom predlošk u tj. 
+prilikom svakog kopiranja teksta ili grafičkog prikaza da bi čitatelj lakše došao do izvornih 
+informacija u radu. U tekstu se literatura navodi unutar pravokutnih zagrada [1].  
+===== STR 3 =====
+2 
+6) Popis oznaka i kratica (po potrebi, a naročito važno kad se u radu kor isti puno oznaka i 
+kratica).  
+7) Sažetak i ključne riječi na hrvatskom i engleskom jezi ku – dio u kojemu student daje kratki 
+pregled svog rada (u obimu do jedne stranice) tj. do kojih je rezultata došao rješavajući 
+problematiku zadatka i sl.  
+8) Dodatak A,  B, ... (po potrebi) – u kojemu dolaze tablice, programski kod, dokumentacija 
+vezana uz praktični dio rada i sl.  
+2. TEHNIČKE UPUTE ZA IZRADU PISANOG DIJELA RADA  
+Tehničkomu oblikovanju pisanoga rada potrebno je posvetiti primjerenu pozornost. 
+Uredno i pregledno pripremljen rad olakšava čitanje te daje uvid u sustavnost izlaganja i obrade 
+izabranog predmeta rada. Rad se piše na računalu u jednom od standardnih tekst procesora . Uz 
+zadovoljavajući vanjski izgled i primjerenu sadržajnu strukturu, rad mora biti  korektan u 
+gramatičkome, pravopisnome i stilskome smislu. Student je dužan savjesno kontrolirati i 
+ispraviti tekst, jer za točnost odgovara isključivo autor. Dakle, prije predaje rada student je 
+dužan pozorno pročitati rad i ispraviti greške u svim primjercima.  
+Cjelokupan sadržaj teksta koji student izlaže u radu treba biti smisleno podijeljen na 
+poglavlja. Poglavlja moraju biti numerirana i svakom poglavlju treba pridijeliti odgovarajući 
+naslov. Naslov poglavlja piše se velikim slovima veličine 14 pt. bo ld. Svako novo poglavlje treba 
+početi na novoj stranici. Poglavlja se prema potrebi dalje raščlanjuju na potpoglavlja. Prva 
+razina potpoglavlja piše se malim slovima veličine 12 pt. bold, a druga razina pot poglavlja 
+veličinom slova 12 pt. Između naslova po glavlja, odnosno potpoglavlja i teksta ispred i iza 
+potrebno je ostaviti jedan prazan red.  
+Primjer:  
+2.       POGLAVLJE  
+2.1.    Prvo potpoglavlje  
+2.1.1. Drugo potpoglavlje  
+Ne smije se pretjerivati u razinama potpoglavlja (podnaslova). Broj razina ovisi  o ukupnoj 
+količini teksta u radu. Uobičajeno je rabiti do tri razine naslova (poglavlje i dva potpoglavlja).  
+ 
+===== STR 4 =====
+3 
+ 
+Kako bi rad bio pregledan i sustavno oblikovan, preporučuje se sljedeće:  
+• odabrati veličinu slova 12 i prored 1,5; preporuča se font Times New Roman,  
+• koristiti standardne margine – margine dolje, gore i desno po 2 cm, margina lijevo 2,5 
+cm, 
+• odabrati poravnavanje na obje strane,  
+• pisati u odlomcima (paragrafima) – pri čemu postoje dva načina:  
+(1) uvučeni početak odlomka (razmak između odlomaka je polovica reda ili 6 pt.),  
+(2) jedan red razmaka između odlomaka (početak odlomka nije uvučen).  
+Dodatne upute za pisanje rada:  
+- iza svake se riječi nalazi samo jedan razmak,  
+- pravopisni znakovi kao što su točka, upitnik, uskličnik, zarez, dv otočka, točka zarez, 
+zatvorena zagrada, navodnici na kraju navoda, znak za postotak, pišu se zajedno s riječju 
+iza koje slijede (između tih znakova i riječi ne stavlja se razmak),  
+- znakovi kao što su navodnici na početku navoda i otvorena zagrada, pišu s e zajedno s 
+riječju ispred koje se nalaze (između tih znakova i riječi također se ne ostavlja razmak),  
+- ako iza neke riječi dolazi tekst u zagradi, između te riječi i početka zagrade ostavlja se 
+razmak,  
+- crtica se piše zajedno s riječima između kojih s toji ako se radi o složenici (npr. 
+znanstveno-istraživački), a odvojeno ako se koristi u neku drugu svrhu,  
+- ispred i iza znaka jednakosti ostavlja se po jedan razmak.  
+Tablice  
+Tablice je potrebno smjestiti što bliže mjestu njihovog ref erenciranja u tekstu i uvijek se 
+smještaju iza onog dijela u tekstu gdje se prvi puta spominju. Izbjegavajte prelamanje tablice 
+preko dvije (ili više) stranica. Svaka tablica mora imati naslov i mora biti numerirana. Naslov 
+tablice dolazi iznad nje. Koristiti zasebnu numera ciju u svakom poglavlju (npr. Tablica 2.1. 
+Naslov tablice). Naslov tablice piše se kosim (italic) slovima. Prvi broj je redni broj poglavlja, a 
+drugi broj je redni broj tablice u tom poglavlju. Tablicu i naslov tablice treba centrirati 
+horizontalno na stranici.  
+Naziv tablice treba odabrati tako da odražava smisao podataka koje prikazuje i piše se 
+velikim početnim slovom. Ako se tablica preuzima iz literature, na kraju naziva poželjno je 
+===== STR 5 =====
+4 
+navesti referencu na način kako je to opisano u poglavlju gdje se opis uju reference. Između 
+teksta i tablice treba biti jedan red razmaka.  
+ 
+Slike  
+Slike je također potrebno smjestiti što bliže mjestu njihovog ref erenciranja u tekstu i 
+uvijek se smještaju iza onog dijela u tekstu gdje se prvi puta spominju. Naziv slike piše se velikim 
+početnim slovom i treba ga odabrati tako da odražava njen smisao. Treba izbjegavati preduge 
+naslove. Naslov slike dolazi ispod nje i svaka slika mora biti numerirana. Koristiti zasebnu 
+numeraciju u svakom poglavlju (npr. Slika 2.1. Naslov slike ). Prvi broj je redni broj poglavlja, a 
+drugi broj je redni broj slike u tom poglavlju. Naslov slike piše se kosim (italic) slovima. Sliku i 
+naslov slike treba centrirati horizontalno na stranici.  
+Ukoliko se slika preuzima iz literature na kojoj se nalaze  pojmovi na nekom od stranih 
+jezika, značenje tih pojmova mora biti navedeno i na hrvatskom jeziku. Ako se slika preuzima iz 
+literature, na kraju naziva potrebno je navesti referencu odakle je slika preuzeta, na način kako 
+je to opisano u poglavlju gdje se opisuju reference.  
+Pri dodavanju slika u rad, potrebno je voditi računa o njihovoj kvaliteti (razlučivosti). 
+Kvalitetu je moguće ocijeniti preko otiska, dok je prikaz na zaslonu ovisan o nizu čimbenika 
+(razlučivosti zaslona, veličini radne površine na za slonu, povećanju, itd.). Između teksta i slike 
+treba biti jedan red  razmaka.  
+===== STR 6 =====
+5 
+ 
+Jednadžbe  
+Jednadžbe se obilježavaju brojem u običnoj zagradi, prvi broj je redni broj poglavl ja, a 
+drugi broj je broj jednadžbe u tom poglavlju. Potrebno je uvijek dati kratke opise oznaka koje se 
+koriste u jednadžbama. Ovo je osobito važno na mjestima gdje se oznake prvi puta uvode ili ako 
+su korištene u nekom udaljenom dijelu teksta. Primjerice: otpor shunta R S računa se prema 
+izrazu (2.7): 
+ 
+ 
+Prilikom pisanja veličina i je dinica obvezno je pridržavati se Zakona o mjeriteljstvu i 
+drugih zakonskih propisa Republike Hrvatske. Obvezna je uporaba jedinica SI (Međunarodni 
+sustav mjernih jedinica). Prema tom Zakonu , varijable i oznake veličina pišu se kurzivnim (italic) 
+slovima (npr. duljina l, brzima v, vrijeme t), a jedinice uspravnim slovima (npr. metar m, amper 
+A, volt V). Nadalje, decimalne se vrijednosti označavaju zarezom, a ne točkom. Uvijek se ostavlja 
+razmak između brojčanog iznosa i oznake jedinice osim kada se piše izno s kuta u stupnjevima, 
+minutama i sekundama. Iznos neke veličine izražava se kao umnožak brojčanog iznosa  i njene 
+jedinice. Primjer: brojčani iznos jakosti struje pisat ćemo kao I = 2 A.  
+ 
+(2.7) 
+===== STR 7 =====
+6 
+LITERATURA  
+Popis literature navodi se na kraju rada. Redoslijed nav ođenja literature prati redoslijed 
+referenciranja u tekstu. Reference se navode pod rednim brojem pod kojim se pojavljuju u 
+popisu, u uglatim zagradama (npr. [1] ili [1, 2, 3, 5]).  
+Postoje različiti izvori informacija, a kao literaturu je najbolje koristi ti stručne knjige i 
+časopise. One se u popisu literature navode na sljedeći način:  
+[1] Prezime1, I1.; Prezime2, I2.; Prezime3, I3.: “Naslov knjige“, Izdavač, mjesto izdavanja, 
+godina.  
+[2] Prezime1, I1.; Prezime2, I2.; Prezime3, I3.: “Naslov članka“, Ime časopisa, broj časopisa, broj 
+stranica, mjesto izdavanja, godina.  
+Ako rad ima više od tri autora, zbog preglednosti preporuča se navesti ime prvog autora i 
+nakon toga “i dr.“.  
+Danas je velik broj informacija objavljen na Internetu. Međutim, kako se inter netske 
+stranice često mijenjaju, u popisu literature navodi se internetska stranica uz čiju adresu 
+svakako mora biti naveden autor citiranog materijala i datum: 
+[3] Prezime, I.: “Naslov“, s Interneta, http://adresa.xx, točan datum.  
+ 
+Primjeri citirane literature:  
+[1]  Poor, H.: “An Introduction to Signal Detection and Estimation”, Springer -Verlag, New York, 
+1985.  
+[2]  Vainio, O. ; Ovaska, S. J.: “Multistage Adaptive Filters for In -Phase Processing of Line -
+Frequency Signals”, IEEE Trans. Ind. Electron., Vol. 44, No. 2, pp. 258-264, 1997.  
+[3]  Williams, J .: “Narrow -band Analyzer”, doktorska disertacija, Dept. Elect. Eng., Harvard 
+Univ., Cambridge, MA, 1993.  
+[4]  Ally, M.: “Osnovne obrazovne teorije online učenja”, s Interneta, 
+http://www.carnet.hr/casopis/38/clanci/3, 11. rujna 2006.  
+ 
+PRILOZI (po potrebi) -  
+u kojemu dolaze tablice, slike, nacrti, dokumentacija vezana uz praktični dio rada, programski  
+kod, i slično.  
+ 
+===== STR 8 =====
+7 
+3. UPUTA ZA SAMOARHIVIRANJE RADA U REPOZITORIJU TEHNIČKOG FAKULTETA 
+Student samostalno ar hivira rad u Digitalni akademski arhiv i repozitorij Dabar 
+(Repozitorij Tehničkog fakulteta u Rijeci). Arhivira se završna verzija rada nakon predaje tiskane 
+verzije rada, o čemu će student dobiti uputu od predsjednika Povjerenstva za 
+završne/diplomske ispite prilikom predaje tiskane verzije rada. Samoarhiviranje rada jedan je od 
+uvjeta za pristupanje obrani rada ili završnom ispitu. 
+ 
+Postupak samoarhiviranja ocjenskih radova 
+ 
+ Repozitoriju se može pristupiti preko web stranice knjižnice Tehničkog fakulteta (Ustroj 
+– Knjižnica – Repozitorij Tehničkog fakulteta) 
+http://www.riteh.uniri.hr/ustroj/knjiznica/. 
+ 
+ Student se na Digitalne akademske arhive i repozitorije RH u repozitorij Tehničkog 
+fakulteta S veučilišta u Rijeci https://repository.riteh.uniri.hr/ prijavljuje svojim 
+AAI@EduHr elektroničkim identitetom. 
+ S desne strane sučelja link je s deteljnim uputama Kako pohraniti svoj rad u repozitorij? 
+ Samoarhiviranje rada student započinje klikom na poveznicu POHRANJIVANJE u 
+gornjem desnom kutu. 
+ Iz padajućeg izbornika zatim odabire ZAVRŠNI, DIPLOMSKI I SPECIJALISTIČKI RADOVI. 
+ Dio podataka o završnom/diplomskom/specijalističkom radu preuzima se iz ISVU -a 
+(Informacijskog sustava visokih učilišta). Polja koja nisu ispunjena, a označena su kao 
+obavezna polja (crvenom zvjezdicom *), moraju se dodatno ispuniti: 
+ na prvoj stranici:  
+o nakon odabira POHRANJIVANJA i odabira vrste rada koji će se pohraniti, 
+odabire se naslov rada koji se pohranjuje. Ako naslov nije ponuđen, 
+odabire se Nijedan od navedenih naslova i klikne Nastavi te je zatim 
+potrebno upisati naslov; 
+o u polju vrsta identifikatora odabire se OIB; 
+===== STR 9 =====
+8 
+o potrebno je zatim unijeti sažetak i ključne riječi  na hrvatskom i 
+engleskom jeziku; 
+o unutar znanstvenog područja u padajućem izborniku treba odabrati 
+polje: Strojarstvo, Brodogradnja, Elektrotehnika ili Računarstvo; 
+o odabrati zatim naziv studijskog programa : diplomski/preddiplomski -
+sveučilišni/stručni Strojarstvo; Brodogradnja; Elektrotehnika; 
+Računarstvo; 
+o podaci o mentoru unose se kroz opciju Pretraga; 
+o klikom na SLJEDEĆA prelazi se na drugu stranicu nakon što su ispunjena 
+sva obavezna polja; 
+o ako je neko od obaveznih polja ostalo nepopunjeno, sljedeća se stranica 
+neće otvoriti, već će se na vrhu otvorene stranice pojaviti obavijest u 
+kojoj će biti navedeno što nedostaje; 
+ na drugoj stranici: 
+o izabire se PDF datote ka rada (Choose File), i pohranjuje klikom na 
+POHRANI; 
+o određuje se pravo pristupa (potrebno je odabrati Rad u otvorenom 
+pristupu), te uvjeti korištenja rada (potrebno je odabrati Creative 
+Commons licenciju – CC BY); 
+o klikom na polje na dnu druge stranice potvrđuje se konačna verzija rada; 
+o upisuju se kontakt podaci studenta: e -mail adresa ili broj telefona na koje 
+urednik/administrator može kontaktirati studenta; 
+o klikom na SLJEDEĆA otvara se treća stranica koja služi za provjeru 
+unesenih podataka; 
+ klikom na SPREMI I POŠALJI NA OBJAVU  student završava postupak 
+samoarhiviranja rada u repozitoriju, te se nakon toga odjavljuje. 
+ 
+Svaki rad koji se pohrani ostaje neaktivan i neobjavljen na javnom sučelju dok ga urednik ili 
+administrator repozitorija ne objavi.  
+Za s va pitanja povezana s pohranjivanjem radova u repozitorij kontaktirajte urednika 
+repozitorija u knjižnici Fakulteta na broj telefona 051 651 422 ili na jednu od adresa e-pošte: 
+knjiznica@riteh.hr 
+soreskovic@riteh.hr
+===== STR 10 =====
+9 
+SVEUČILIŠTE U RIJECI 
+TEHNIČKI FAKULTET 
+Diplomski sveučilišni studij strojarstva 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Diplomski rad  
+POSTUPCI TOPLINSKE OBRADE 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Rijeka, ožujak 2016.       Ivica Ivić 
+          0069077777 
+Times New Roman 16  
+Times New Roman 16 Bold 
+Times New Roman 14  
+Times New Roman 16 Bold 
+Times New Roman 14  
+Times New Roman 14  
+Prilog 1. 
+===== STR 11 =====
+10 
+SVEUČILIŠTE U RIJECI 
+TEHNIČKI FAKULTET 
+Diplomski sveučilišni studij strojarstva 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Diplomski rad  
+POSTUPCI TOPLINSKE OBRADE 
+Mentor: Prof. dr. sc. Petar Perić 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Rijeka, ožujak 2016.       Ivica Ivić 
+          0069077777 
+Times New Roman 16 Bold 
+Times New Roman 14  
+Times New Roman 16 Bold 
+Times New Roman 14  
+Times New Roman 14  
+Times New Roman 14  
+Times New Roman 16  
+Prilog 2. 

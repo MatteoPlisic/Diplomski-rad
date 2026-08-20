@@ -118,10 +118,11 @@ Parametri zajednicki svim varijantama:
 | D | `strict_v3` | 4 | 25% | da | — |
 | E | `strict_v4` | 4 | 25% | da | 0.85× |
 | F | `strict_v5` | 4 | 25% | da | 0.5× |
+| **G** | `strict_v3` | 4 | 25% | da | — (topli start iz C) |
 
-Dodatno: **D-from-C** — varijanta D, ali prior i pocetni agent ucitani iz
-prethodnog C runa (topli start). Pokrece se s `--prior` i `--agent` koji
-pokazuju na `data/results/run_..._C_strict_v2/Agent.ckpt`.
+Varijanta **G** koristi isti filtar kao D, ali su joj prior i pocetni agent
+ucitani iz prethodnog C runa (topli start). Pokrece se skriptom
+`scripts/run_G.ps1` (nakon `scripts/run_pair_CD.ps1`).
 
 ---
 

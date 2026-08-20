@@ -10,9 +10,8 @@ import sys
 from pepfunn.sequence import peptideFromSMILES
 
 RESULTS_DIR = "data/results"
-LABEL_TOKENS = ("_A_basic", "_B_strict", "_C_strict_v2",
-                "_D_strict_v3", "_D_from_C_strict_v3", "_E_strict_v4",
-                "_F_strict_v5")
+LABEL_TOKENS = ("_A_basic", "_B_strict", "_C_strict_v2", "_D_strict_v3",
+                "_E_strict_v4", "_F_strict_v5", "_G_warmstart")
 
 
 def classify(smiles: str):

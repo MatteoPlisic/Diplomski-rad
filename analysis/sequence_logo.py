@@ -32,26 +32,27 @@ import matplotlib.pyplot as plt
 import logomaker
 
 RESULTS_DIR = "data/results"
-LABEL_TOKENS = ("_A_basic", "_B_strict", "_C_strict_v2",
-                "_D_strict_v3", "_D_from_C_strict_v3", "_E_strict_v4",
-                "_F_strict_v5")
+LABEL_TOKENS = ("_A_basic", "_B_strict", "_C_strict_v2", "_D_strict_v3",
+                "_E_strict_v4", "_F_strict_v5", "_G_warmstart")
 
 STANDARD = list("ACDEFGHIKLMNPQRSTVWY")
 
 # Noncanonical token -> single-character symbol
+# Mapiranje za 300-koracne runove: pokriva svih 12 razlicitih nekanonskih
+# ostataka koji se u njima pojavljuju (D-forme + Hse + X-numbered po cestoci).
 TOKEN_TO_SYMBOL = {
     "dOrn":  "α",
     "dDpr":  "β",
     "dDab":  "γ",
     "Hse":   "δ",
-    "X1668": "ε",
-    "X3021": "ζ",
-    "X113":  "η",
-    "X2516": "θ",
-    "X2258": "ι",
-    "X680":  "κ",
-    "X975":  "λ",
-    "X1410": "μ",
+    "X2516": "ε",
+    "X1955": "ζ",
+    "X680":  "η",
+    "X1243": "θ",
+    "X136":  "ι",
+    "X1668": "κ",
+    "X2113": "λ",
+    "X3010": "μ",
 }
 UNMAPPED_SYMBOL = "?"
 
@@ -118,11 +119,18 @@ def read_sequences(results_file):
 
 
 def build_frequency_matrix(sequences):
-    """Left-align with gap-padding, count per-position frequency over the full alphabet."""
+    """Left-align (N-terminus) and count amino acids per position.
+
+    Normalizacija je po UKUPNOM broju sekvenci (N), ne po broju prisutnih na
+    pojedinoj poziciji. Posljedica: visina stupca = pokrivenost te pozicije
+    (udio molekula koje uopce dosezu tu poziciju). Stupci se prema C-kraju
+    prirodno snizuju, sto posteno signalizira da kasne pozicije pociva na
+    manje molekula."""
     if not sequences:
         return None
 
     L = max(len(s) for s in sequences)
+    N = len(sequences)
     counts = np.zeros((L, len(ALPHABET)))
     sym_idx = {s: i for i, s in enumerate(ALPHABET)}
 
@@ -131,20 +139,21 @@ def build_frequency_matrix(sequences):
             if sym in sym_idx:
                 counts[i, sym_idx[sym]] += 1
 
-    row_sums = counts.sum(axis=1, keepdims=True)
-    row_sums[row_sums == 0] = 1
-    freqs = counts / row_sums
+    freqs = counts / N   # zbroj stupca = pokrivenost pozicije (<= 1)
     return pd.DataFrame(freqs, columns=ALPHABET)
 
 
 def make_logo(matrix, title, output_path):
+    import matplotlib.ticker as mticker
     fig, ax = plt.subplots(figsize=(max(8, len(matrix) * 0.45), 4))
     logomaker.Logo(matrix, ax=ax, color_scheme=COLOR_MAP,
                    font_name="DejaVu Sans")
-    ax.set_xlabel("Position")
-    ax.set_ylabel("Frequency")
+    ax.set_xlabel("Pozicija (od N-kraja)")
+    ax.set_ylabel("Udio svih molekula")
     ax.set_title(title, fontsize=10)
     ax.set_ylim(0, 1)
+    # decimalni zarez umjesto tocke (upute za rad)
+    ax.yaxis.set_major_formatter(mticker.FuncFormatter(lambda v, _: f"{v:.1f}".replace(".", ",")))
 
     # Add a footer legend explaining Greek -> noncanonical mapping
     legend_lines = []
@@ -152,7 +161,7 @@ def make_logo(matrix, title, output_path):
     for i in range(0, len(inv), 4):
         chunk = inv[i:i+4]
         legend_lines.append("   ".join(f"{sym}={tok}" for tok, sym in chunk))
-    fig.text(0.01, 0.01, "Noncanonical legend:\n" + "\n".join(legend_lines),
+    fig.text(0.01, 0.01, "Nekanonske aminokiseline:\n" + "\n".join(legend_lines),
              fontsize=7, family="DejaVu Sans", va="bottom")
 
     plt.tight_layout(rect=(0, 0.10, 1, 1))

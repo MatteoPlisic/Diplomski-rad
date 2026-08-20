@@ -1,0 +1,83 @@
+\chapter{Uvod}
+\label{ch:uvod}
+
+Razvoj novih lijekova jedan je od najskupljih i vremenski najzahtjevnijih
+procesa u suvremenoj znanosti. Klasičan pristup, u kojem se kandidati za
+djelatne tvari pronalaze laboratorijskim pretraživanjem velikog broja
+spojeva, sve se češće nadopunjuje računalnim metodama koje prostor mogućih
+molekula suzuju prije nego što se uopće pristupi eksperimentalnoj sintezi.
+Među takvim metodama posebno se ističu generativni modeli dubokog učenja,
+koji ne biraju samo između postojećih spojeva, već \emph{de novo} predlažu
+potpuno nove molekulske strukture s traženim svojstvima.
+
+Posebno zanimljivu skupinu ciljnih molekula čine antimikrobni peptidi
+(eng. \emph{antimicrobial peptides}, AMP). To su u vodi topljivi peptidi
+sastavljeni od kratkih lanaca aminokiselina, koje višestanični organizmi
+prirodno proizvode kao prvu liniju obrane od virusa, bakterija, gljivica i
+tumorskih stanica \cite{negovetic2022}. Budući da su uglavnom pozitivno
+nabijeni, AMP-ovi djeluju izravno na membrane ciljanih mikroorganizama, a
+zanimanje za njih dodatno raste jer dosad nije zabilježena bakterija
+otporna na ljudske AMP-ove, što ih čini obećavajućom alternativom
+klasičnim antibioticima na koje se otpornost stalno povećava. Upravo zbog
+toga generiranje novih peptidnih struktura s visokom predviđenom
+antimikrobnom aktivnošću predstavlja vrijedan i aktualan istraživački cilj.
+
+Polazna točka ovog rada je model \textbf{REINVENT}, generativni okvir
+temeljen na povratnoj neuronskoj mreži (eng. \emph{recurrent neural
+network}, RNN) i pojačanom učenju (eng. \emph{reinforcement learning}, RL).
+REINVENT najprije uči distribuciju valjanih molekula iz velike baze
+spojeva, a zatim se dobiveni model (tzv. \emph{prior}) usmjerava prema
+željenom kemijskom prostoru tako da se nagrađuju molekule koje postižu
+visok rezultat zadane funkcije vrednovanja (eng. \emph{scoring function}).
+Model je, međutim, izvorno osmišljen i treniran za područje malih organskih
+molekula nalik lijekovima, a ne za peptide. Cilj je ovog rada istražiti
+prednosti i nedostatke takvog modela te ispitati može li se njegova
+arhitektura prilagoditi domeni aminokiselina, odnosno usmjeriti generiranje
+prema valjanim peptidnim strukturama zapisanim u formatu SMILES
+(eng. \emph{Simplified Molecular Input Line Entry System}).
+
+Da bi se generativni model uopće mogao usmjeriti prema antimikrobnim
+peptidima, potrebna je funkcija vrednovanja koja prepoznaje upravo to
+svojstvo. Standardne funkcije vrednovanja ugrađene u REINVENT nisu
+prikladne jer su vezane uz sličnost s referentnim malim molekulama ili uz
+svojstva nevezana za peptide. Stoga je kao funkcija vrednovanja iskorišten
+postojeći model strojnog učenja razvijen u srodnom radu \cite{negovetic2022},
+treniran upravo na aminokiselinskim sekvencama radi predviđanja
+antimikrobne aktivnosti. Time je dobivena prirodna poveznica između dvaju
+modela: REINVENT predlaže nove peptidne kandidate, dok ih spomenuti model
+ocjenjuje s obzirom na vjerojatnu antimikrobnu aktivnost.
+
+Navedeni referentni model temelji se na algoritmu slučajnih šuma
+(eng. \emph{random forest}), ansamblu velikog broja stabala odluke koji
+dobro podnosi šum i neuravnotežene skupove podataka te jednako kvalitetno
+rješava klasifikacijske i regresijske probleme \cite{negovetic2022}. Model
+ne radi izravno nad tekstualnim zapisom molekule, već nad skupom
+brojčanih molekulskih značajki (deskriptora) izračunatih iz SMILES zapisa.
+Konkretno, koristi se klasifikator s 600 stabala, kod kojeg je najveći broj
+značajki po čvoru ograničen na korijen ukupnog broja značajki, a vrednovanje
+je provedeno unakrsnom validacijom uz metriku ROC-AUC (eng. \emph{Receiver
+Operating Characteristic -- Area Under Curve}). Kako bi broj ulaznih
+značajki ostao obradiv, u izvornom je radu nad njima provedena predobrada i
+odabir reprezentativnog podskupa. U ovom radu taj se model koristi kao
+gotova, prethodno istrenirana komponenta za vrednovanje generiranih peptida.
+
+Pri odabiru konkretne inačice REINVENT okvira odlučeno je raditi s
+ranijom, arhitektonski jednostavnijom verzijom modela umjesto s
+najsuvremenijom. Razlog je tome jasnija i preglednija struktura programskog
+koda s manje vanjskih ovisnosti, što je olakšalo razumijevanje i izmjenu
+same petlje pojačanog učenja, kao i ugradnju vlastite funkcije vrednovanja.
+Naprednije inačice nude dodatne načine rada (primjerice dekoraciju okosnice
+molekule ili povezivanje fragmenata) koji za ovaj zadatak nisu nužni, pa bi
+njihova složenost unijela nepotrebne troškove bez stvarne koristi.
+Mogućnost korištenja modela strojnog učenja izvan izvorne arhitekture
+REINVENT-a time je iskorištena u dva smjera: zamjenom ugrađene funkcije
+vrednovanja vanjskim modelom slučajnih šuma te uvođenjem dodatnih
+ograničenja kojima se generiranje usmjerava prema valjanim peptidima.
+
+U sklopu rada ispitana je mogućnost prenamjene postojećeg \emph{prior}
+modela za generiranje aminokiselinskih sekvenci, razvijeno je nekoliko
+varijanti dodatnih filtara i kazni kojima se oblikuje funkcija vrednovanja,
+te su provedeni i međusobno uspoređeni eksperimenti treniranja agenta.
+Dobiveni rezultati vrednovani su s obzirom na udio stvarno generiranih
+peptida, njihov sastav te kretanje rezultata vrednovanja kroz proces učenja,
+a potom su dovedeni u vezu s relevantnim rezultatima iz srodne literature.
