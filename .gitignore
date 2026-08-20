@@ -29,3 +29,9 @@ __pycache__/
 # OS
 .DS_Store
 Thumbs.db
+
+# Rezultati treninga (veliki izlazi, ~1.4GB; regeneriraju se treniranjem)
+data/results/
+
+# Popravljeni RF model (regenerira se s: python setup/fix_model.py)
+models/random_forest_model_amp_fixed.pkl

@@ -1,0 +1,556 @@
+= Generiranje antimikrobnih peptida primjenom REINVENT okvira
+:author: Matteo Plišić
+:revdate: 2026-05-25
+:toc: left
+:toc-title: Sadržaj
+:toclevels: 3
+:sectnums:
+:icons: font
+:imagesdir: data/results
+:source-highlighter: rouge
+
+
+== Uvod i motivacija
+
+Otpornost na antibiotike postaje globalan zdravstveni problem koji prijeti da
+mnoge dosad lako izlječive infekcije postanu smrtonosne. Antimikrobni peptidi
+(AMP) predstavljaju obećavajuću alternativu klasičnim antibioticima: prirodno
+ih luče gotovo svi živi organizmi kao prvi obrambeni mehanizam, djeluju širokim
+spektrom, a vjerojatnost razvoja rezistencije je niža zbog načina djelovanja na
+membranu patogena.
+
+Laboratorijsko traženje novog AMP kandidata je dugotrajno i skupo. Cilj ovog
+rada je primijeniti generativni model temeljen na pojačanom učenju (engl.
+_reinforcement learning_, RL) koji predlaže nove peptidne strukture s
+predviđenom visokom AMP aktivnošću, kako bi se taj proces ubrzao i suzio
+prostor pretraživanja prije eksperimentalne validacije.
+
+
+== Pregled literature i odabir okvira
+
+=== Pročitani radovi
+
+Prije razvoja vlastite implementacije proučeni su sljedeći ključni radovi koji
+opisuju primjenu generativnih neuronskih mreža u dizajnu lijekova:
+
+* *Olivecrona et al. (2017)* — _Molecular de novo design through deep
+  reinforcement learning_. Definira izvorni REINVENT framework: RNN treniran
+  na ChEMBL bazi kao prior, fine-tunan pojačanim učenjem prema scoring
+  funkciji.
+* *Blaschke et al. (2020)* — _REINVENT 2.0: An AI Tool for De Novo Drug
+  Design_. Zadržava istu RNN/RL jezgru, a dodaje višekomponentnu (MPO)
+  scoring funkciju i _diversity filtere_ (scaffold "buckets" koji kažnjavaju
+  redundanciju i potiču istraživanje kemijskog prostora).
+* *Loeffler et al. (2024)* — _REINVENT 4: Modern AI–driven generative
+  molecule design_. Najsuvremenija verzija; uvodi Transformer modele i
+  objedinjuje više generatora i algoritama učenja.
+
+Bitno je napomenuti i da postoji *REINVENT 3*, no on je objavljen isključivo
+kao otvoreni programski kod, bez popratnog znanstvenog rada. U toj su inačici
+integrirani generatori Lib-INVENT i Link-INVENT. Zbog izostanka recenzirane
+publikacije, u pregledu literature prelazi se izravno s verzije 2.0 na 4.
+
+=== REINVENT 4
+
+Prvotno je razmotren javni repozitorij `MolecularAI/REINVENT4` (verzija 4.x,
+2024). U njemu su jasno razdvojeni _generatori_ (algoritmi koji stvaraju
+molekule) od _algoritama učenja_ (načina na koji se generator usmjerava).
+
+Podržani generatori:
+
+[cols="1,3", options="header"]
+|===
+| Generator | Funkcija
+| *Reinvent* | Klasično _de novo_ generiranje, atom po atom (RNN)
+| *Libinvent* | Dekoracija okosnice (scaffold) bočnim skupinama, do 4 točke vezanja
+| *Linkinvent* | Generiranje linkera koji povezuje dva zadana fragmenta
+| *Mol2Mol* | Optimizacija zadane molekule unutar granica sličnosti (Transformer)
+|===
+
+Podržani algoritmi učenja: pojačano učenje (RL), prijenosno učenje
+(eng. _transfer learning_) te postupno/kurikularno učenje (eng. _curriculum
+learning_).
+
+Arhitektura je značajno složenija: TOML/JSON konfiguracija, modularni
+plug-in scoring podsustav, Transformer modeli te ovisnosti o više vanjskih
+biblioteka.
+
+=== Odabir starije verzije
+
+Nakon proučavanja koda, odlučeno je raditi s *REINVENT 2*. Ključni je razlog
+to što ta inačica već sadrži _sve značajke nužne za ovaj zadatak_: prior
+treniran na SMILES zapisima, petlju pojačanog učenja s _augmented likelihood_
+formulom te mogućnost zamjene scoring funkcije vlastitim modelom. Drugim
+riječima, sve što je potrebno za usmjeravanje generiranja prema peptidima
+postoji već u verziji 2, pa naprednije inačice ne bi donijele nikakvu stvarnu
+prednost — samo dodatnu složenost.
+
+Konkretno, prednosti ovog odabira su:
+
+* Sve potrebne značajke već su prisutne u REINVENT 2, pa prelazak na noviju
+  verziju ne bi proširio mogućnosti relevantne za ovaj rad
+* Jednostavnija arhitektura — jedan glavni `train_agent.py` modul i
+  jasna petlja, lakše ju je razumjeti i modificirati
+* Manje vanjskih ovisnosti i nema potrebe za TOML/JSON konfiguracijskim slojem
+* Napredni generatori novijih verzija (Libinvent, Linkinvent, Mol2Mol)
+  rješavaju probleme dekoracije okosnice i povezivanja fragmenata, što za
+  generiranje cjelovitih peptida _de novo_ nije potrebno
+* Lakša integracija vlastite scoring funkcije s lokalnim AMP modelom
+
+
+== Polazni REINVENT — analiza scoring funkcija
+
+=== Scoring funkcije u repozitoriju
+
+REINVENT 2 dolazi s tri ugrađene scoring funkcije, definirane u
+`scoring_functions.py`:
+
+[cols="1,3", options="header"]
+|===
+| Funkcija | Opis
+| `no_sulphur` | DeepChem `MultitaskRegressor` (npr. QED model) na Morgan
+  fingerprintima; vraća predviđenu vrijednost svojstva u [0, 1]
+| `tanimoto` | Originalno: Tanimoto sličnost s referentnom strukturom (npr.
+  Aspirin), na Morgan fingerprintima; *prenamjenjeno u ovom radu* za poziv
+  vlastitog AMP RF modela na Mordred deskriptorima
+| `activity_model` | Sklearn klasifikator (npr. SVM, RF) na ECFP4 (Morgan)
+  fingerprintima; vraća `predict_proba` za aktivnu klasu
+|===
+
+=== Testiranje i prilagodbe
+
+Testiranjem se pokazalo da:
+
+* `tanimoto` funkcija je najpogodnija točka za zamjenu — već koristi
+  cijeli batch i vraća skalar u [0, 1]
+* RF model treniran na Mordred deskriptorima za predikciju AMP aktivnosti
+  zahtijeva instalaciju paketa `mordred` (s downgrade-om `networkx` na 2.8.8
+  radi kompatibilnosti)
+* Pickle datoteka starog RF modela (sklearn 0.21.1) nije kompatibilna sa
+  sklearn 1.7.2 — bilo je potrebno izraditi `fix_model.py` skriptu koja
+  monkey-patcha `_tree._check_node_ndarray` funkciju, dodaje polje
+  `missing_go_to_left` i mapira `base_estimator → estimator`
+
+=== AMP scoring funkcija
+
+Korištena scoring funkcija ovog rada poziva RF klasifikator
+`random_forest_model_amp_fixed.pkl`:
+
+[source]
+----
+mol = Chem.MolFromSmiles(smile)
+features = mordred_calc(mol).fill_missing(value=0)
+feature_vector = [float(features[name]) for name in clf.feature_names_in_]
+proba = clf.predict_proba(feature_vector)[0]
+score = proba[1] / proba.sum()  # P(AMP active), normalized
+----
+
+Model je obučen na 293 Mordred deskriptora i klasificira molekulu kao AMP
+aktivnu (klasa 1) ili neaktivnu (klasa 0). Score je vjerojatnost klase 1
+nakon normalizacije (postojao je bug u starom pickleu gdje
+`predict_proba` nije bila normalizirana, pa smo morali to ručno ispraviti).
+
+
+== Generiranje SMILES nizova
+
+=== Batch size i petlja
+
+U svakom RL koraku agent generira *64 SMILES niza* (parametar `batch_size`).
+Tih 64 prolazi kroz scoring funkciju, nakon čega se update-aju težine agenta
+gradient descent korakom. Ispis u konzoli prikazuje samo prvih 10 radi
+preglednosti, ali sve se koriste za trening i experience replay.
+
+Pri tipičnoj konfiguraciji s 250 koraka, agent kroz cijeli trening generira
+oko 16 000 molekula, od kojih top 100 (po scoreu) ostaje u experience replay
+memoriji.
+
+=== Prve generacije
+
+Pri prvim pokretanjima s defaultnim parametrima uočeno je sljedeće:
+
+* Generirane molekule su organski spojevi tipa malih lijekova — aromatski
+  prsteni, sulfonamidi, esteri — što odgovara distribuciji ChEMBL priora
+* Vrlo rijetko se pojavljuju peptidne strukture
+* AMP RF model unatoč tome ponekad daje visok score nepeptidnim molekulama
+  — false positive
+
+Zaključak: scoring funkciju treba pojačati eksplicitnim filtriranjem peptida
+prije nego što agent može efikasno učiti.
+
+
+== Pretvorba u aminokiselinske sekvence
+
+=== PepFuNN biblioteka
+
+Korištena je biblioteka *PepFuNN* (Novo Nordisk), funkcija
+`peptideFromSMILES()`. Algoritam:
+
+. Reže molekulu duž peptidnih veza
+. Svaki fragment uspoređuje s internom bibliotekom aminokiselina (sadrži i
+  D-forme i sintetske analoge)
+. Vraća niz oblika `G-A-F-X1726-K` ili `None` ako molekula nije peptid
+
+[cols="1,2", options="header"]
+|===
+| Verdikt | Definicija
+| `PEPTIDE` | >=2 ostatka, svi standardne L-aminokiseline (A, C, D, ...)
+| `PEPTIDE_NONCANONICAL` | >=2 ostatka, svi prepoznati ali neki nekanonski
+  (D-forme, X-numbered)
+| `PEPTIDE_PARTIAL` | Sadrži nepoznati fragment ("X")
+| `NOT_PEPTIDE` | Manje od 2 ostatka ili nije peptid
+|===
+
+=== Skripte za klasifikaciju
+
+* `check_memory_peptides_pepfunn.py` — klasificira top 100 molekula iz
+  najnovijeg runa
+* `check_all_runs.py` — paketno za sve labelirane runove
+
+
+== Modifikacije scoring pipelinea
+
+NOTE: Ovaj odjeljak opisuje promjene uvedene tijekom razvoja rada — peptide
+filter, normalizaciju, prilagodbu formule i varijante.
+
+=== Peptide filter
+
+Funkcija `peptide_filter()` u `train_agent.py` koristi PepFuNN za klasifikaciju
+svake molekule iz batcha. Ne-peptidne molekule dobivaju težinu 0.0, čime im
+se score množi s nulom i ne kontribuiraju u learning signal.
+
+[source,python]
+----
+if peptide_only:
+    score = score * peptide_filter(smiles, **filter_kwargs)
+----
+
+=== Normalizacija scorea
+
+RF model rijetko daje vrijednosti izvan raspona [0.3, 0.85]. Razlika između
+"loše" (0.35) i "dobre" (0.75) molekule je premala da bi RL gradient
+efikasno učio. Stoga se score linearno razvlači:
+
+[source,python]
+----
+score = np.clip((score - 0.3) / (0.85 - 0.3), 0.0, 1.0)
+----
+
+Rezultat: distinkcija postaje 0.09 vs 0.91 — agent dobiva jasnu informaciju
+što je bolje.
+
+=== Modificirana augmented likelihood formula
+
+Izvorni REINVENT koristi:
+
+[source]
+----
+augmented_likelihood = prior_likelihood + sigma * score
+----
+
+U ovom radu uveden je `prior_weight` parametar:
+
+[source]
+----
+augmented_likelihood = prior_weight * prior_likelihood + sigma * score
+----
+
+Pri `prior_weight = 0.8` i `sigma = 80` agent može malo opustiti vezu s
+ChEMBL distribucijom i istraživati peptidni prostor, a sigma povećan iznad
+defaultnih 60 kompenzira slabiji prior anchor.
+
+=== Experience replay
+
+Originalna implementacija imala je `experience_replay = 0` (isključeno) kao
+default. Eksperimentalno se pokazalo da uključivanje s vrijednošću 10
+(broj uzoraka iz top-100 memorije po koraku) značajno ubrzava konvergenciju.
+
+Dodatno je popravljen bug: kad su svi scoreovi 0 (peptide filter izfiltrirao
+sve), `np.random.choice` s `p=scores/sum(scores)` pucao je NaN-om. Riješeno
+fallbackom na uniformnu distribuciju.
+
+=== Varijante peptide filtera
+
+Implementirano je 5 varijanti uz mogućnost odabira preko CLI parametra
+`--filter-mode`:
+
+[cols="1,1,1,1,1,1", options="header"]
+|===
+| Varijanta | mode | min AK | max % nekanon. | bez 3+ istih | mekana 0.85x kazna
+| A | `basic` | 2 | bez limita | ne | ne
+| B | `strict` | 2 | bez limita | *da* | ne
+| C | `strict_v2` | *4* | *25%* | ne | ne
+| D | `strict_v3` | 4 | 25% | da | ne
+| E | `strict_v4` | 4 | 25% | da | *da*
+|===
+
+Dodatno: *D-from-C* — varijanta D ali s prior + početni agent inicijaliziranim
+iz Agent.ckpt prethodnog C runa (warm-start eksperiment).
+
+Obrazloženje pravila:
+
+* *Min 4 AK* — prirodni AMP-ovi su 10-50 AK
+* *Max 25% nekanonskih* — praktičnije sintetizirati u laboratoriju
+* *Bez 3+ istih za redom* — izbjegava homopolimere koje RF model ponekad lažno visoko ocjenjuje
+* *0.85x mekana kazna* — dodatno destimulira sintetske AK bez hard rejecta
+
+
+== Eksperimentalni rezultati
+
+=== Sažetak runova
+
+Svi runovi su 250 koraka, batch 64.
+
+[cols="3,1,1,1,1", options="header"]
+|===
+| Run folder | Varijanta | PEPTIDE | NONCANON | % nekanon.
+| `run_..._A_basic_1` | A | 38 | 12 | 24%
+| `run_..._A_basic_2` | A | 0 | 50 | 100%
+| `run_..._A_basic_3` | A | 18 | 32 | 64%
+| `run_..._B_strict` | B | 23 | 27 | 54%
+| `run_..._C_strict_v2` | C | 37 | 13 | 26%
+| `run_..._D_strict_v3` | D | 49 | 1 | 2%
+| `run_..._D_from_C_strict_v3` | D-from-C | 19 | 31 | 62%
+| `run_..._E_strict_v4` | E | 50 | 0 | *0%*
+|===
+
+=== Score progress po runu
+
+Avg/median/best score po koraku spremaju se u `score_history.csv`. Za svaki
+run generirana su dva prikaza:
+
+* `score_progress.png` — tri odvojena subplota (avg, median, best)
+* `score_progress_combined.png` — sve tri metrike *na istom grafu* radi
+  izravne usporedbe njihove dinamike
+
+.Score progress (combined) — Varijanta E (strict_v4)
+image::run_2026-05-26-19_00_30_E_strict_v4/score_progress_combined.png[Score progress E, 700]
+
+.Score progress (combined) — Varijanta D (strict_v3)
+image::run_2026-05-25-12_02_19_D_strict_v3/score_progress_combined.png[Score progress D, 700]
+
+.Score progress (combined) — Varijanta A run 1 (basic)
+image::run_2026-05-19-17_32_43_A_basic_1/score_progress_combined.png[Score progress A, 700]
+
+Stroženje filtera *ne* smanjuje finalni avg score — naprotiv, D i E (najstroži)
+imaju jednake ili veće vrhove od A i B.
+
+=== Usporedba svih runova
+
+Skripta `compare_scores.py` preklapa krivulje svih osam runova na zajedničke
+osi. Generira `compare_scores_all.png` (tri subplota — avg, median, best) i
+`compare_scores_avg.png` (samo average, veći format).
+
+.Usporedba average score-a — svi runovi
+image::compare_scores_avg.png[Usporedba average, 800]
+
+.Usporedba avg/median/best — svi runovi
+image::compare_scores_all.png[Usporedba sve metrike, 700]
+
+Na zajedničkom grafu jasno se vidi da warm-start (D-from-C) starta s
+prednošću u odnosu na D od nule, te da stroge varijante (D, E) dosežu
+jednako visok ili viši plato unatoč užem filtru.
+
+=== Stohastičnost RL-a (A varijanta x3)
+
+Tri identično konfigurirana A runa završila su s vrlo različitim udjelima
+nekanonskih (24%, 100%, 64%). To pokazuje da RL trening ovisi o seedu i
+početnom batchu — *uvijek treba raditi više ponavljanja* za pouzdane
+zaključke.
+
+=== Warm-start eksperiment (D-from-C)
+
+Hipoteza je bila da inicijalizacija prior + agent iz prethodnog C runa
+ubrzava konvergenciju jer agent već "zna" peptide. Rezultat: konvergencija
+*jest* brža, ali agent je naslijedio C-jevu sklonost nekanonskim
+aminokiselinama (62% nekanonskih u memory naspram 2% u D-od-nule).
+
+Zaključak: *warm-start nasljeđuje bias prethodnog modela* — treba pažljivo
+birati ishodišnu točku.
+
+=== Učinkovitost mekane kazne (E vs D)
+
+Varijanta E dodaje 0.85x kaznu peptidima koji sadrže _bilo koju_ nekanonsku
+AK. Iako je hard cap od 25% u D dovoljan da spriječi pretjeranu sintetsku
+prisutnost, mekana kazna u E je dovela do *0% nekanonskih* u memory —
+agent je potpuno izbjegao nekanonske jer mu je bilo "lakše" dobiti puni
+score bez njih.
+
+To je elegantnije rješenje od hard rejecta jer agent ne mora istraživati
+"zabranjeni" prostor — dovoljno mu je blago destimulirati.
+
+
+== Sequence logo
+
+Za svaki run generiran je sequence logo u `sequence_logo.png` koji prikazuje
+pozicijske frekvencije aminokiselina.
+
+=== Proširena abeceda
+
+Standardnih 20 L-aminokiselina nije bilo dovoljno jer su PepFuNN sekvence
+sadržavale i nekanonske ostatke. Identificirano je 12 značajnih nekanonskih
+oznaka kojima su pridijeljeni grčki simboli:
+
+[cols="1,1,3", options="header"]
+|===
+| Original | Simbol | Opis
+| `dOrn` | α | D-ornitin (pozitivna pobočna)
+| `dDpr` | β | D-2,3-diaminopropionska
+| `dDab` | γ | D-2,4-diaminobutanska
+| `Hse` | δ | L-homoserin (polarna)
+| `X1668` | ε | PepFuNN library
+| `X3021` | ζ | PepFuNN library
+| `X113` | η | PepFuNN library
+| `X2516` | θ | PepFuNN library
+| `X2258` | ι | PepFuNN library
+| `X680` | κ | PepFuNN library (rijetka)
+| `X975` | λ | PepFuNN library (rijetka)
+| `X1410` | μ | PepFuNN library (rijetka)
+|===
+
+Boje na logu označavaju kemijsku kategoriju:
+
+* *žuta* — hidrofobne (G, A, V, L, I, P, M, F, W)
+* *zelena* — polarne (S, T, Y, N, Q, C)
+* *crvena* — kisele (D, E)
+* *plava* — bazične (K, R, H)
+* *ružičasta* — D-pozitivne (α, β, γ)
+* *ljubičasta* — X-numbered (ε–μ)
+
+=== Primjeri logoa
+
+.Sequence logo — Varijanta E (strict_v4)
+image::run_2026-05-26-19_00_30_E_strict_v4/sequence_logo.png[Logo E, 800]
+
+.Sequence logo — Varijanta D (strict_v3)
+image::run_2026-05-25-12_02_19_D_strict_v3/sequence_logo.png[Logo D, 800]
+
+.Sequence logo — Varijanta C (strict_v2)
+image::run_2026-05-21-21_52_37_C_strict_v2/sequence_logo.png[Logo C, 800]
+
+.Sequence logo — Varijanta D-from-C
+image::run_2026-05-25-21_40_13_D_from_C_strict_v3/sequence_logo.png[Logo D-from-C, 800]
+
+.Sequence logo — Varijanta A run 2 (100% nekanonskih)
+image::run_2026-05-19-20_31_17_A_basic_2/sequence_logo.png[Logo A run 2, 800]
+
+Usporedba pokazuje:
+
+* E logo dominira žuto-zelenim (G, S, Q, E) — čisti standardni profil
+* D logo praktički identičan E, s tek 1 ružičastim slovom
+* C logo ima vidljiv prisustvo ljubičaste i ružičaste (~26% nekanonskih)
+* A run 2 logo je pretežno ljubičast jer agent nikad nije naučio
+  generirati čiste L-peptide
+
+
+== Struktura repozitorija
+
+[source]
+----
+Diplomski rad/
+├── main.py                          # CLI entry
+├── train_agent.py                   # RL trening + peptide_filter
+├── scoring_functions.py             # tanimoto, no_sulphur, activity_model
+├── model.py                         # RNN (GRU) agent
+├── data_structs.py                  # Vocabulary, Experience replay
+├── utils.py                         # Variable, seq_to_smiles
+├── vizard_logger.py                 # logiranje težina
+├── fix_model.py                     # sklearn pickle compat fix
+│
+├── check_memory_peptides_pepfunn.py # klasifikacija najnovijeg runa
+├── check_all_runs.py                # klasifikacija svih labeliranih runova
+├── noncanonical_inventory.py       # popis svih nekanonskih AK
+├── identify_runs.py                 # heuristika za prepoznavanje runa
+├── sequence_logo.py                 # generira logo za svaki run
+├── compare_scores.py                # per-run combined + usporedni grafovi
+│
+├── run_variants.ps1                 # vrti više varijanti
+├── run_bc.ps1                       # samo B i C
+├── run_d.ps1                        # samo D
+├── run_d_from_c.ps1                 # D s warm-startom iz C
+├── run_e.ps1                        # samo E
+│
+└── data/
+    ├── Prior.ckpt                   # bazni ChEMBL RNN
+    ├── Voc                          # vokabular SMILES tokena
+    └── results/
+        ├── run_..._A_basic_1/       # za svaki run:
+        │   ├── Agent.ckpt
+        │   ├── memory               # top 100 SMILES
+        │   ├── sampled              # 256 finalnih molekula
+        │   ├── score_history.csv
+        │   ├── score_progress.png            # 3 subplota
+        │   ├── score_progress_combined.png   # avg+median+best na 1 grafu
+        │   ├── peptide_results_pepfunn.txt
+        │   └── sequence_logo.png
+        ├── compare_scores_all.png   # svi runovi, 3 subplota
+        ├── compare_scores_avg.png   # svi runovi, average
+        └── VARIANTS_README.txt
+----
+
+
+== Zaključak
+
+Razvijena je adaptacija REINVENT 2 okvira za usmjereno generiranje
+peptidnih molekula s predviđenom visokom AMP aktivnošću. Ključni doprinosi:
+
+* *Peptide filter* — eliminira ne-peptidne false positive iz scoring
+  pipelinea
+* *Score normalizacija* — značajno ubrzava konvergenciju RL-a
+* *Modificirana augmented likelihood formula* s `prior_weight` parametrom
+* *Pet varijanti filtera* od najliberalnije do najstrože, s mogućnošću
+  warm-starta
+* *Sequence logo s proširenom abecedom* za 12 nekanonskih ostataka
+* *Klasifikacijski i analitički toolset* za sve runove
+
+Eksperimentalno je pokazano:
+
+* Mekana kazna (varijanta E) je elegantnije rješenje od hard rejecta
+* Warm-start nasljeđuje bias ishodišta — koristiti opreznо
+* RL trening je stohastičan — potrebno je više ponavljanja
+
+=== Daljnji rad
+
+* *Seed memory* — pre-fill experience replay sa znanim AMP-ovima prije RL
+* *Transfer learning prior* — fine-tunati ChEMBL prior na peptidnoj bazi
+  prije RL faze
+* *Multi-objective scoring* — kombinirati AMP score s toksičnošću,
+  hidrofobnošću, topivošću
+* *Eksperimentalna validacija* — sintetizirati top kandidate i in vitro
+  testirati antimikrobnu aktivnost
+* *Veći modeli* — zamijeniti GRU Transformer dekoderom
+
+
+[appendix]
+== Pokretanje
+
+Pojedinačni run:
+
+[source,powershell]
+----
+.\.venv\Scripts\python.exe main.py `
+    --scoring-function tanimoto `
+    --num-steps 250 `
+    --sigma 80 `
+    --prior-weight 0.8 `
+    --filter-mode strict_v3
+----
+
+Više varijanti u nizu:
+
+[source,powershell]
+----
+.\run_variants.ps1   # A x3, B x1, C x1
+.\run_d.ps1
+.\run_d_from_c.ps1
+.\run_e.ps1
+----
+
+Analiza nakon treninga:
+
+[source,powershell]
+----
+.\.venv\Scripts\python.exe check_all_runs.py          # klasifikacija peptida
+.\.venv\Scripts\python.exe noncanonical_inventory.py  # popis nekanonskih AK
+.\.venv\Scripts\python.exe sequence_logo.py           # sequence logi
+.\.venv\Scripts\python.exe compare_scores.py          # grafovi score-a
+----

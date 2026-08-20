@@ -21,8 +21,6 @@ try:
 except ImportError:
     pexpect = None  # pexpect is Unix-only; not needed when num_processes=0
 
-import scraper
-
 rdBase.DisableLog('rdApp.error')
 
 """Scoring function should be a class where some tasks that are shared for every call
@@ -134,7 +132,7 @@ class tanimoto():
        Returns predict_proba score in range [0, 1]."""
 
     kwargs = ["clf_path"]
-    clf_path = 'random_forest_model_amp_fixed.pkl'
+    clf_path = 'models/random_forest_model_amp_fixed.pkl'
 
     def __init__(self):
         from mordred import Calculator, descriptors as mordred_descriptors
